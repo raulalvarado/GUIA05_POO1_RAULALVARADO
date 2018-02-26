@@ -9,6 +9,8 @@ import com.sv.udb.modelo.Equipos;
 import com.sv.udb.controlador.controlEquipos;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UIManager;
 
 /**
  *
@@ -24,6 +26,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         refresh();
     }
 
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -194,6 +197,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     int idEq;
 
     private void refresh() {
@@ -289,7 +293,7 @@ public class frmPrincipal extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Sea Glass".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
