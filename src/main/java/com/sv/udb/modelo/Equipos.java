@@ -16,7 +16,7 @@ public class Equipos {
     private int codigoeq;
     private String nomb;
     private String desc;
-    private List<Jugadores> listJuga;
+    private ArrayList<Jugadores> listJuga;
 
     /**
     * Constructor, no olvidar crear el objeto de las listas
@@ -24,9 +24,10 @@ public class Equipos {
     *
     * @param nomb El nombre del equipo
     */
-    public Equipos(String nomb) {
-        this.listJuga = new ArrayList<>();
+    public Equipos(int codigoeq, String nomb, String desc) {
+        this.codigoeq= codigoeq;
         this.nomb = nomb;
+        this.desc=desc;
     }
 
     public Equipos() {
@@ -41,12 +42,11 @@ public class Equipos {
         this.nomb = nomb;
     }
     
-    public List<Jugadores> getListJuga() {
+    public ArrayList<Jugadores> getListJuga() {
         return listJuga;
     }
-
-    public void setListJuga(List<Jugadores> listJuga) {
-        this.listJuga = listJuga;
+     public void addPlayer(Jugadores jugador) {
+        this.listJuga.add(jugador);
     }
 
     public int getCodigoeq() {

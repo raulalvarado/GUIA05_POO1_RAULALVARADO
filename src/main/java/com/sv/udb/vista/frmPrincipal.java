@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 package com.sv.udb.vista;
+
+import com.sv.udb.modelo.Equipos;
 import com.sv.udb.controlador.controlEquipos;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,6 +21,7 @@ public class frmPrincipal extends javax.swing.JFrame {
      */
     public frmPrincipal() {
         initComponents();
+        refresh();
     }
 
     /**
@@ -39,6 +43,9 @@ public class frmPrincipal extends javax.swing.JFrame {
         pnlEquipos = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEqui = new javax.swing.JTable();
+        btnActualizar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,6 +73,11 @@ public class frmPrincipal extends javax.swing.JFrame {
                 "Nombre", "Descripción"
             }
         ));
+        tblEqui.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEquiMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblEqui);
 
         javax.swing.GroupLayout pnlEquiposLayout = new javax.swing.GroupLayout(pnlEquipos);
@@ -84,6 +96,29 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnActualizar.setText("Actualizar");
+        btnActualizar.setEnabled(false);
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.setEnabled(false);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -99,7 +134,14 @@ public class frmPrincipal extends javax.swing.JFrame {
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnGuardar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnGuardar)
+                            .addComponent(btnEliminar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
                 .addComponent(pnlEquipos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -118,8 +160,14 @@ public class frmPrincipal extends javax.swing.JFrame {
                             .addComponent(txtDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnGuardar)
-                        .addGap(0, 223, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnGuardar)
+                            .addComponent(btnActualizar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEliminar)
+                            .addComponent(btnLimpiar))
+                        .addGap(0, 194, Short.MAX_VALUE))
                     .addComponent(pnlEquipos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -146,26 +194,89 @@ public class frmPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    int idEq;
+
+    private void refresh() {
+        try {
+            //Limpiando campos
+            idEq = 0;
+            txtNomb.setText("");
+            txtDesc.setText("");
+            //Obteniendo y limpiando modelo de tabla
+            DefaultTableModel model = (DefaultTableModel) tblEqui.getModel();
+            while (model.getRowCount() > 0) {
+                model.removeRow(0);
+            }
+            //Llenando modelo
+            for (Equipos eq : new controlEquipos().selectEquipos()) {
+                model.addRow(new Object[]{eq, eq.getDesc()});
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al llenar tabla de equipos: " + e.getMessage());
+        }
+    }
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        try
-        {
-            if(new controlEquipos().guardar(this.txtNomb.getText(), this.txtDesc.getText()))
-            {
-                JOptionPane.showMessageDialog(this, "Equipo guardado correctamente","POO1", JOptionPane.INFORMATION_MESSAGE);
-                this.txtNomb.setText("");
-                this.txtDesc.setText("");
+        try {
+            if (new controlEquipos().guardar(this.txtNomb.getText().trim(), this.txtDesc.getText().trim())) {
+                JOptionPane.showMessageDialog(this, "Equipo guardado correctamente", "POO1", JOptionPane.INFORMATION_MESSAGE);
+                refresh();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar equipo", "POO1", JOptionPane.INFORMATION_MESSAGE);
             }
-            else
-            {
-                JOptionPane.showMessageDialog(this, "Error al guardar equipo","POO1", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(this, "Error al procesar","POO1", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al procesar", "POO1", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        // TODO add your handling code here:
+        try {
+            if ( new controlEquipos().updateEqupos(idEq, txtNomb.getText().trim(), txtDesc.getText().trim())) {
+                JOptionPane.showMessageDialog(this, "Equipo modificado");
+                refresh();
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Error al modificar el equipo.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al procesar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+         try {
+            if ( new controlEquipos().deleteEquipos(idEq)) {
+                JOptionPane.showMessageDialog(this, "Equipo eliminado");
+                refresh();
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar el equipo.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al procesar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void tblEquiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEquiMouseClicked
+        // TODO add your handling code here:
+        int row = tblEqui.getSelectedRow();
+        if (row >= 0) {
+            Equipos eq = (Equipos) tblEqui.getValueAt(row, 0);
+            idEq = eq.getCodigoeq();
+            txtNomb.setText(eq.getNomb());
+            txtDesc.setText(eq.getDesc());
+            btnGuardar.setEnabled(false);
+            btnActualizar.setEnabled(true);
+            btnEliminar.setEnabled(true);
+        }
+    }//GEN-LAST:event_tblEquiMouseClicked
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,7 +314,10 @@ public class frmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JPanel jPanel1;
