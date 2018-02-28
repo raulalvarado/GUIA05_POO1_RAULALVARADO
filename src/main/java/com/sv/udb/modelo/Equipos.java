@@ -45,9 +45,11 @@ public class Equipos {
     public ArrayList<Jugadores> getListJuga() {
         return listJuga;
     }
-     public void addPlayer(Jugadores jugador) {
-        this.listJuga.add(jugador);
+
+    public void setListJuga(ArrayList<Jugadores> listJuga) {
+        this.listJuga = listJuga;
     }
+
 
     public int getCodigoeq() {
         return codigoeq;
