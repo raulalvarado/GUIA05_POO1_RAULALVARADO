@@ -10,20 +10,32 @@ package com.sv.udb.modelo;
  * @author Mauricio González
  */
 public class Jugadores {
-    private int codigojug;
+    private int codigoJug;
+    private Equipos codigoEqui;
     private String nomb;
     private int edad, altu, peso;
 
     public Jugadores() {
     }
 
-    public Jugadores(String nomb, int edad, int altura, int peso) {
+    public Jugadores(int codigoJug, Equipos codigoEqui, String nomb,  int edad, int altura, int peso) {
+        this.codigoJug=codigoJug;
+        this.codigoEqui=codigoEqui;
         this.nomb = nomb;
         this.edad = edad;
         this.altu = altura;
         this.peso = peso;
     }
 
+    public Equipos getCodigoEqui() {
+        return codigoEqui;
+    }
+
+    public void setCodigoEqui(Equipos codigoEqui) {
+        this.codigoEqui = codigoEqui;
+    }
+
+    
     public String getNomb() {
         return nomb;
     }
@@ -56,12 +68,12 @@ public class Jugadores {
         this.peso = peso;
     }
 
-    public int getCodigojug() {
-        return codigojug;
+    public int getCodigoJug() {
+        return codigoJug;
     }
 
     public void setCodigojug(int codigojug) {
-        this.codigojug = codigojug;
+        this.codigoJug = codigojug;
     }
     
 
