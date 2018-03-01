@@ -70,8 +70,8 @@ public class controlJugadores {
        List<Jugadores> resp = new ArrayList<>();
         try
         {
-            PreparedStatement cmd = conect.prepareStatement("SELECT j.codi_juga, e.*, j.nomb_juga, j.edad_juga, j.altu_juga, \n" +
-"                j.peso_juga FROM jugadores j INNER JOIN equipos e ON j.codi_equi = e.codi_equi");
+            PreparedStatement cmd = conect.prepareStatement("SELECT j.codi_juga, e.*, j.nomb_juga, j.edad_juga, j.altu_juga," +
+                                            " j.peso_juga FROM jugadores j INNER JOIN equipos e ON j.codi_equi = e.codi_equi");
             //Vea la siguiente ayuda
             /*Una opción de query podría ser: 
                 SELECT j.codi_juga, e.*, j.nomb_juga, j.edad_juga, j.altu_juga, 
@@ -80,7 +80,7 @@ public class controlJugadores {
             ResultSet rs = cmd.executeQuery();
             while(rs.next())
             {
-                resp.add(null); // <----- Hay que llenar con los objetos
+               resp.add(rs.getInt(1),new Equipos(rs.getInt(2),rs.getString(3),rs.getString(4)),rs.getString(5),rs.getInt(6),rs.getInt(7),rs.getInt(8)); // <----- Hay que llenar con los objetos
             }
         }
         catch(SQLException ex)

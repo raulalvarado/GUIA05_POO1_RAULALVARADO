@@ -28,6 +28,8 @@ public class frmPrincipal extends javax.swing.JFrame {
     public frmPrincipal() {
         initComponents();
         refresh();
+        refreshJuga();
+        refreshJugacmb();
     }
 
    
@@ -380,8 +382,6 @@ public class frmPrincipal extends javax.swing.JFrame {
     int idEq;
     int idJug;
 
-    controlEquipos ctrlEq= new controlEquipos();
-    controlJugadores ctrlJug= new controlJugadores();
     private void refresh() {
         try {
             idEq = 0;
@@ -391,7 +391,7 @@ public class frmPrincipal extends javax.swing.JFrame {
             while (model.getRowCount() > 0) {
                 model.removeRow(0);
             }
-            for (Equipos eq : ctrlEq.selectEquipos()) {
+            for (Equipos eq : new controlEquipos().selectEquipos()) {
                 model.addRow(new Object[]{eq, eq.getDesc()});
             }
 
@@ -404,12 +404,9 @@ public class frmPrincipal extends javax.swing.JFrame {
     {
         try
         {
-            DefaultComboBoxModel cmbModelJug=(DefaultComboBoxModel) cmbEquipos.getModel();
-            while(cmbModelJug.getSize()>0)
-            {
-                cmbModelJug.removeElement(0);
-            }
-            for(Equipos eq2: ctrlEq.selectEquipos())
+            DefaultComboBoxModel cmbModelJug= (DefaultComboBoxModel)cmbEquipos.getModel();
+            cmbModelJug.removeAllElements();
+            for(Equipos eq2: new controlEquipos().selectEquipos())
             {
                 cmbModelJug.addElement(eq2);
             }
@@ -429,7 +426,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         {
             modelJug.removeRow(0);
         }
-        for(Jugadores ju: ctrlJug.consTodo())
+        for(Jugadores ju: new controlJugadores().consTodo())
         {
             modelJug.addRow(new Object[]{ju, ju.getEdad(),ju.getAltura(), ju.getPeso(),ju.getCodigoEqui()});
         }
@@ -517,9 +514,9 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void btnGuardarJugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarJugActionPerformed
         // TODO add your handling code here:
          try {
-            if (ctrlJug.guardar((Equipos) this.cmbEquipos.getSelectedItem(), this.txtNombJug.getText().trim(), Integer.parseInt(this.txtEdadJug.getText().trim()), Integer.parseInt(this.txtAlturaJug.getText().trim()), Integer.parseInt(this.txtPesoJug.getText().trim()))) {
+            if (new controlJugadores().guardar((Equipos) this.cmbEquipos.getSelectedItem(), this.txtNombJug.getText().trim(), Integer.parseInt(this.txtEdadJug.getText().trim()), Integer.parseInt(this.txtAlturaJug.getText().trim()), Integer.parseInt(this.txtPesoJug.getText().trim()))) {
                 JOptionPane.showMessageDialog(this, "Equipo guardado correctamente", "POO1", JOptionPane.INFORMATION_MESSAGE);
-                refresh();
+                refreshJuga();
             } else {
                 JOptionPane.showMessageDialog(this, "Error al guardar equipo", "POO1", JOptionPane.INFORMATION_MESSAGE);
             }

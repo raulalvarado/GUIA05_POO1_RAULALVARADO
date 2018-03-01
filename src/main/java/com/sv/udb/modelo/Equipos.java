@@ -53,10 +53,6 @@ public class Equipos {
     public void setDesc(String desc) {
         this.desc = desc;
     }
-    
-    
-    
-    
 
     @Override
     public String toString() {
