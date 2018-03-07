@@ -112,6 +112,70 @@ public class controlJugadores {
         }
         return resp;
     }
+     
+     public boolean actualizar(int codigoJuga,Equipos codigoEqui, String nombJuga, int edadJuga, int alturaJuga, int pesoJuga)
+    {
+        boolean resp= false;
+        try
+        {
+            PreparedStatement cmd = this.conect.prepareStatement("UPDATE jugadores SET codi_equi = ?, "
+                    + "nomb_juga = ?, edad_juga = ?, altu_juga = ?, peso_juga = ? WHERE codi_juga = ?");
+            cmd.setInt(1, codigoEqui.getCodigoeq());
+            cmd.setString(2, nombJuga);
+            cmd.setInt(3, edadJuga);
+            cmd.setInt(4, alturaJuga);
+            cmd.setInt(5, pesoJuga);
+            cmd.setInt(6, codigoJuga);
+            cmd.executeUpdate();
+            resp=true;
+        
+        }
+        catch(SQLException ex)
+         {
+             System.err.println("Ocurrio un error al actualizar equipos: "+ ex.getMessage());
+         }
+        finally
+        {
+             try
+            {
+                if(this.conect != null)
+                {
+                    if(!this.conect.isClosed())
+                    {
+                        this.conect.close();
+                    }
+                }
+            }
+            catch(SQLException ex)
+            {
+                System.err.println("Error al cerrar la conexión");
+            }
+        }
+        return resp;
+        }
+     
+      public boolean eliminar (int codiJuga) {
+        boolean resp = false;
+        try {
+            PreparedStatement cmd = conect.prepareStatement("DELETE FROM jugadores WHERE codi_juga = ?");
+            cmd.setInt(1, codiJuga);
+            cmd.executeUpdate();
+            resp = true;
+        }
+        catch (Exception e) {
+            System.err.println("Error al eliminar jugador: " + e.getMessage());
+        }
+        finally {
+            try {
+                if (conect != null)
+                    if (!conect.isClosed())
+                        conect.close();
+            } catch (Exception e) {
+                System.err.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }
+        return resp;       
+    }
     }
     
     

@@ -252,7 +252,6 @@ public class frmPrincipal extends javax.swing.JFrame {
                 "Nombre", "Edad", "Altura", "Peso", "Equipo"
             }
         ));
-        tblJuga.setEnabled(false);
         tblJuga.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblJugaMouseClicked(evt);
@@ -384,6 +383,9 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     private void refresh() {
         try {
+            btnGuardar.setEnabled(true);
+            btnActualizar.setEnabled(false);
+            btnEliminar.setEnabled(false);
             idEq = 0;
             txtNomb.setText("");
             txtDesc.setText("");
@@ -468,6 +470,9 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
          try {
+             int n = JOptionPane.showConfirmDialog(this, "¿Desea eliminar el equipo?", "Equipo", JOptionPane.YES_NO_OPTION);
+             
+              if (n == JOptionPane.YES_OPTION) {
             if ( new controlEquipos().deleteEquipos(idEq)) {
                 JOptionPane.showMessageDialog(this, "Equipo eliminado");
                 refresh();
@@ -475,6 +480,7 @@ public class frmPrincipal extends javax.swing.JFrame {
             else {
                 JOptionPane.showMessageDialog(this, "Error al eliminar el equipo.");
             }
+              }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al procesar", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
@@ -501,10 +507,44 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     private void btnActualizarJugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarJugActionPerformed
         // TODO add your handling code here:
+          try {
+            if ( new controlJugadores().actualizar(idJug, 
+                                                (Equipos) cmbEquipos.getSelectedItem(),
+                                                txtNombJug.getText().trim(), 
+                                                Integer.parseInt(txtEdadJug.getText().trim()),
+                                                Integer.parseInt(txtAlturaJug.getText().trim()),
+                                                Integer.parseInt(txtPesoJug.getText().trim()))) 
+            {
+                JOptionPane.showMessageDialog(this, "Jugador modificado");
+                refreshJuga();
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Error al modificar el jugador.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al procesar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnActualizarJugActionPerformed
 
     private void btnEliminarJugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarJugActionPerformed
         // TODO add your handling code here:
+         try {
+            
+            int n = JOptionPane.showConfirmDialog(this, "¿Desea eliminar el jugador?", "Jugador", JOptionPane.YES_NO_OPTION);
+            
+            if (n == JOptionPane.YES_OPTION) {
+            
+                if ( new controlJugadores().eliminar(idJug)) {
+                    JOptionPane.showMessageDialog(this, "Jugador eliminado");
+                    refreshJuga();
+                }
+                else {
+                    JOptionPane.showMessageDialog(this, "Error al eliminar el jugador.");
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al procesar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEliminarJugActionPerformed
 
     private void btnLimpiarJugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarJugActionPerformed
@@ -523,10 +563,29 @@ public class frmPrincipal extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al procesar", "POO1", JOptionPane.INFORMATION_MESSAGE);
         }
+         refreshJugacmb();
     }//GEN-LAST:event_btnGuardarJugActionPerformed
 
     private void tblJugaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblJugaMouseClicked
         // TODO add your handling code here:
+         int row = tblJuga.getSelectedRow();
+         
+        if (row >= 0) {
+            Jugadores jug = (Jugadores) tblJuga.getValueAt(row, 0);
+            idJug = jug.getCodigoJug();
+            txtNombJug.setText(jug.getNomb());
+            txtEdadJug.setText(String.valueOf(jug.getEdad()));
+            txtAlturaJug.setText(String.valueOf(jug.getAltura()));
+            txtPesoJug.setText(String.valueOf(jug.getPeso()));
+            
+            cmbEquipos.setEditable(true);
+            cmbEquipos.setSelectedItem(jug.getCodigoEqui());
+            cmbEquipos.setEditable(false);
+            
+            btnGuardarJug.setEnabled(false);
+            btnActualizarJug.setEnabled(true);
+            btnEliminarJug.setEnabled(true);
+        }
     }//GEN-LAST:event_tblJugaMouseClicked
 
     /**
