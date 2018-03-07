@@ -80,7 +80,13 @@ public class controlJugadores {
             ResultSet rs = cmd.executeQuery();
             while(rs.next())
             {
-               resp.add(rs.getInt(1),new Equipos(rs.getInt(2),rs.getString(3),rs.getString(4)),rs.getString(5),rs.getInt(6),rs.getInt(7),rs.getInt(8)); // <----- Hay que llenar con los objetos
+                resp.add(new Jugadores(
+                        rs.getInt(1),
+                        new Equipos(rs.getInt(2), rs.getString(3), rs.getString(4)),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getInt(8))); // <----- Hay que llenar con los objetos
             }
         }
         catch(SQLException ex)
